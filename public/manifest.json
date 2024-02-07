@@ -1,0 +1,20 @@
+{
+   "browser_action": {
+      "default_icon": "calvin_and_hobbes_icon.png",
+      "default_popup": "hello.html"
+   },
+   "description": "Display a random Calvin and Hobbes comic strip.",
+   "icons": {
+      "128": "icons/icon-128.png",
+      "16": "icons/icon-16.png",
+      "24": "icons/icon-24.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm8gDFk3AiEtoG7MJOkl5YaVBJTsu+1/1yI6+q3CoaLyB/bDg+wfFX0g0OksZjYObmWV9nqM4TK3TOnGRGjlwA+ezB6LFbz6K42zwbA4apF4O1LCvDDbbcmU0ZI1X76odVwRVb1sIlkf6cEHsC/4/BrdXk5d/E4DIX1QsFGtX6f+io3cCffkiVlzdeqM+uVThEBw66vnOZojNjofafitEX//4aT5PP1mcjFjX8xzOqUYvVVhRHh0WgHzq2XAIhqM8/8n0m0VWYXsN0ACtqE0p3AIMTCir4DPh6mYPnDgVPqI2+B7z4HoG6gsWjsC+n5gIAbdnc8Wvl+TNskRFaW6T5wIDAQAB",
+   "manifest_version": 3,
+   "name": "Calvin and Hobbes Explorer",
+   "permissions": ["management"],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.0.3"
+}
