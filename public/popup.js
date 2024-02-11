@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', function () {
+let stories = null;
+
+document.addEventListener('DOMContentLoaded', async function () {
     let sel = document.getElementById('month-year');
     for(let yr = 1985; yr < 1996; yr++) {
         for(let mn = (yr == 1985 ? 11 : 1); mn <= 12; mn++) {
@@ -12,6 +14,18 @@ document.addEventListener('DOMContentLoaded', function () {
         loadComics();
     });
 
+    let story = document.getElementById('story');
+    stories = await (await fetch('story-arcs.json')).json();
+    for(n = 0; n < stories.length; n++) {
+        let opt = document.createElement('option');
+        opt.value = n;
+        opt.innerText = stories[n].title.substring(0, 64);
+        story.appendChild(opt);
+    }
+    story.addEventListener('change', function() {
+        loadComics(story.value);
+    });
+
     loadComics();
     
     document.getElementById('reload').addEventListener('click', function() {
@@ -21,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function loadComics() {
+function loadComics(storyId) {
     let sel = document.getElementById('month-year');
     let monthyear = sel.value;
     const linktocomicplacement = document.getElementById('text');
@@ -29,15 +43,27 @@ function loadComics() {
     comic.innerHTML = '';
     linktocomicplacement.innerHTML = '';
 
-    let day = sel.value == '1985/11' ? 18 : 1;
-    const startDate = new Date(sel.value + '/' + day);
-    let date = new Date(sel.value + '/' + day);
-    // console.log(date);
+    if(storyId === undefined) {
+        let day = sel.value == '1985/11' ? 18 : 1;
+        const startDate = new Date(sel.value + '/' + day);
+        let date = new Date(sel.value + '/' + day);
+        // console.log(date);
 
-    while(date.getMonth() == startDate.getMonth()) {
-        console.log(date);
-        addComic(comic, date);
-        date.setDate(date.getDate()+1);
+        while(date.getMonth() == startDate.getMonth()) {
+            console.log(date);
+            addComic(comic, date);
+            date.setDate(date.getDate()+1);
+        }
+    } else {
+        let story = stories[storyId];
+        let startDate = new Date(story.startDate);
+        let endDate = new Date(story.endDate);
+        console.log('startDate: '+startDate);
+        console.log('endDate:'+endDate);
+        for(let date = new Date(startDate); date.valueOf() <= endDate.valueOf(); date.setDate(date.getDate()+1)) {
+            console.log(date);
+            addComic(comic, date);
+        }
     }
 
     /*
