@@ -1,0 +1,50 @@
+body {
+  font-size: 12px;
+  font-family: Arial;
+}
+
+h1, #comic {
+  text-align: center
+}
+
+#controls {
+  margin: 0 auto;
+  width: fit-content;
+  position: relative;
+}
+
+#nav {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+#search-results {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  max-height: 400px;
+  max-width: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border: solid 1px black;
+  background: white;
+  box-shadow: 3px 3px 2px rgba(80,80,80,0.3);
+}
+
+div#search-results {
+  display: none;
+}
+
+div.show#search-results {
+  display: block;
+}
+
+#search-results div {
+  text-align: left;
+  display: block;
+  cursor: pointer;
+}
+
+#search-results div:hover {
+  background-color: #00aaff;
+}

@@ -28,11 +28,48 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     loadComics();
     
-    document.getElementById('reload').addEventListener('click', function() {
+    $('#reload').on('click', function() {
         if(sel.selectedIndex == sel.options.length - 1) sel.selectedIndex = 0;
         else sel.selectedIndex = sel.selectedIndex + 1;
         loadComics();
     });
+
+    $('#next-arc').on('click', function() {
+        const story = document.getElementById('story');
+        if(story.selectedIndex == story.options.length - 1) story.selectedIndex = 0;
+        else story.selectedIndex = story.selectedIndex + 1;
+        loadComics(story.selectedIndex);
+    });
+    
+    const doSearch = (e) => {
+        const searchText = $('#search').val().toLowerCase().trim();
+        if(searchText != '') {
+            $('#search-results').addClass('show');
+        } else {
+            $('#search-results').removeClass('show');
+            return;
+        }
+    
+        $('#search-results').empty();
+    
+        const matches = stories.filter(story => (' '+story.title.toLowerCase()).includes(' '+searchText));
+        matches.forEach(m => {
+            const res = $('<div>');
+            res.text(m.title);
+            (function(m) {
+                res.on('click', (e) => {
+                    $('#story').val(stories.indexOf(m));
+                    loadComics(stories.indexOf(m));
+                    $('#search-results').removeClass('show');
+                });
+            })(m);
+            $('#search-results').append(res);
+        });
+    };
+    // $('#search').on('change', doSearch);
+    $('#search').on('input', doSearch);
+    // $('#search').on('blur', () => {$('#search-results').removeClass('show');});
+    doSearch();
 });
 
 function loadComics(storyId) {
