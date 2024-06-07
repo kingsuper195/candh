@@ -113,7 +113,9 @@ function loadComics(storyId) {
         console.log('endDate:'+endDate);
         for(let date = new Date(startDate); date.valueOf() <= endDate.valueOf(); date.setDate(date.getDate()+1)) {
             console.log(date);
-            addComic(comic, date);
+            if(!date.getDay()==0 || sundayStrips){
+                addComic(comic, date);
+            }
         }
     }
 
