@@ -1,4 +1,5 @@
 const express = require('express');
+const he = require('he');
 const app = express();
 
 
@@ -9,16 +10,19 @@ app.get('/strip', async (request, response) => {
   const url = 'https://www.gocomics.com/calvinandhobbes/'+year+'/'+month.padStart(2, '0')+'/'+day.padStart(2, '0');
   const result = await fetch(url);
   const text = await result.text();
-  const re = text.match(/<meta property="og:image" content="([^"]+)"/);
-  if(re) {
-    const img = re[1];
-    response.write(img); //JSON.stringify(data));
+  const strip = text.match(/<meta property="og:image" content="([^"]+)"/);
+  const dialog = text.match(/<meta property="og:description" content="([^"]+)"/);  
+  if(strip) {
+    const img = strip[1];
+    response.write(img);
+    const text = he.decode(dialog[1]);
+    console.dir(strip[1])
+    console.dir(text)
   } else {
     response.status(500);
     response.write('ERROR');
   }
   response.end();
-  // fs.writeFileSync('data.txt', text, 'utf-8');
 });
 
 app.use('/', express.static('../public'));
