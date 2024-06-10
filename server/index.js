@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const fs = require('fs');
+
 
 app.get('/strip', async (request, response) => {
   console.dir(request.query);
@@ -12,7 +12,7 @@ app.get('/strip', async (request, response) => {
   const re = text.match(/<meta property="og:image" content="([^"]+)"/);
   if(re) {
     const img = re[1];
-    response.write(re[1]); //JSON.stringify(data));
+    response.write(img); //JSON.stringify(data));
   } else {
     response.status(500);
     response.write('ERROR');

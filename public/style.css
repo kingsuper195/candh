@@ -1,7 +1,3 @@
-body {
-  font-size: 12px;
-  font-family: Arial;
-}
 
 h1, #comic {
   text-align: center
@@ -29,6 +25,7 @@ h1, #comic {
   border: solid 1px black;
   background: white;
   box-shadow: 3px 3px 2px rgba(80,80,80,0.3);
+  min-width: 300px;
 }
 
 div#search-results {
@@ -46,5 +43,9 @@ div.show#search-results {
 }
 
 #search-results div:hover {
-  background-color: #00aaff;
+  background-color: #bfbfbf;
+}
+
+#comic {
+  padding-top: 60px;
 }

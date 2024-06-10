@@ -1,5 +1,6 @@
 let stories = null;
-
+let sundayStrips = true;
+let dataToLoad = undefined;
 document.addEventListener('DOMContentLoaded', async function () {
     let sel = document.getElementById('month-year');
     for(let yr = 1985; yr < 1996; yr++) {
@@ -11,7 +12,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
     sel.addEventListener('change', function() {
-        loadComics();
+        dataToLoad = undefined;
+        loadComics(dataToLoad);
     });
 
     let story = document.getElementById('story');
@@ -23,22 +25,25 @@ document.addEventListener('DOMContentLoaded', async function () {
         story.appendChild(opt);
     }
     story.addEventListener('change', function() {
-        loadComics(story.value);
+        dataToLoad = story.value;
+        loadComics(dataToLoad);
     });
-
-    loadComics();
+    dataToLoad  = undefined;
+    loadComics(dataToLoad);
     
     $('#reload').on('click', function() {
         if(sel.selectedIndex == sel.options.length - 1) sel.selectedIndex = 0;
         else sel.selectedIndex = sel.selectedIndex + 1;
-        loadComics();
+        dataToLoad = undefined;
+        loadComics(dataToLoad);
     });
 
     $('#next-arc').on('click', function() {
         const story = document.getElementById('story');
         if(story.selectedIndex == story.options.length - 1) story.selectedIndex = 0;
         else story.selectedIndex = story.selectedIndex + 1;
-        loadComics(story.selectedIndex);
+        dataToLoad = story.selectedIndex;
+        loadComics(dataToLoad);
     });
     
     const doSearch = (e) => {
@@ -54,12 +59,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     
         const matches = stories.filter(story => (' '+story.title.toLowerCase()).includes(' '+searchText));
         matches.forEach(m => {
-            const res = $('<div>');
+            const res = $('<div class="nav-item">');
             res.text(m.title);
             (function(m) {
                 res.on('click', (e) => {
                     $('#story').val(stories.indexOf(m));
-                    loadComics(stories.indexOf(m));
+                    dataToLoad = stories.indexOf(m);
+                    loadComics(dataToLoad);
                     $('#search-results').removeClass('show');
                 });
             })(m);
@@ -71,6 +77,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     // $('#search').on('blur', () => {$('#search-results').removeClass('show');});
     doSearch();
 });
+$(function () {
+    $('#sunstrips').change(function () {
+        sundayStrips = $(this).prop('checked')
+        loadComics(dataToLoad);
+    })
+})
 
 function loadComics(storyId) {
     let sel = document.getElementById('month-year');
@@ -88,7 +100,9 @@ function loadComics(storyId) {
 
         while(date.getMonth() == startDate.getMonth()) {
             console.log(date);
-            addComic(comic, date);
+            if(!date.getDay()==0 || sundayStrips){
+                addComic(comic, date);
+            };
             date.setDate(date.getDate()+1);
         }
     } else {
@@ -99,7 +113,9 @@ function loadComics(storyId) {
         console.log('endDate:'+endDate);
         for(let date = new Date(startDate); date.valueOf() <= endDate.valueOf(); date.setDate(date.getDate()+1)) {
             console.log(date);
-            addComic(comic, date);
+            if(!date.getDay()==0 || sundayStrips){
+                addComic(comic, date);
+            }
         }
     }
 
