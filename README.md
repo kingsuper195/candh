@@ -5,5 +5,4 @@ This is just a little node.js project. It uses a back end to fetch calvin and ho
 - [ ] sunday strip only view
 - [ ] make it so that the sunday strip toggle only effects the sunday strips
 - [ ] retry failed strip loading
-  
-  .
+- [ ] dynamically changing bootswatch themes
