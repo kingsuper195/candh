@@ -1,27 +1,25 @@
 const express = require('express');
-const he = require('he');
 const app = express();
-
+const metadata = require('./metadata.js');
+const { loadMetadataFromServer } = require('./load-from-server.js');
 
 app.get('/strip', async (request, response) => {
   console.dir(request.query);
   const { day, month, year } = request.query;
-  
-  const url = 'https://www.gocomics.com/calvinandhobbes/'+year+'/'+month.padStart(2, '0')+'/'+day.padStart(2, '0');
-  const result = await fetch(url);
-  const text = await result.text();
-  const strip = text.match(/<meta property="og:image" content="([^"]+)"/);
-  const dialog = text.match(/<meta property="og:description" content="([^"]+)"/);  
-  if(strip) {
-    const img = strip[1];
-    response.write(img);
-    const text = he.decode(dialog[1]);
-    console.dir(strip[1])
-    console.dir(text)
-  } else {
-    response.status(500);
-    response.write('ERROR');
+  const date = year+'/'+month.padStart(2, '0')+'/'+day.padStart(2, '0');
+
+  let md = metadata.get(date);
+  if(!md) {
+    md = await loadMetadataFromServer(date);
+    if(!md) {
+      response.status(500);
+      response.write('ERROR');
+      response.end();
+      return;
+    }
+    metadata.save(date, md);
   }
+  response.write(md.strip);
   response.end();
 });
 
